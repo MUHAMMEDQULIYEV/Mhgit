@@ -10,13 +10,20 @@ def init():
 
 
 
-def hash_object(data):
-    oid=hashlib.sha1(data).hexdigest()
+def hash_object(data,type="blob"):
+    obj = type_.encode () + b'\x00' + data
+    oid=hashlib.sha1(obj).hexdigest()
 
     with open (f"{GIT_DIR}objects/{oid}","wb") as out:
-        out.write(data)
+        out.write(obj)
     return oid
 
-def get_object (oid):
+def get_object (oid,expexted="blob"):
     with open (f'{GIT_DIR}/objects/{oid}', 'rb') as f:
-        return f.read ()
+        obj=f.read()
+    type_,_,content=obj.partition(b"\x00")
+    type_=type_.decode()
+    if expexted is not None:
+        assert type_ ==expexted,f"Expected {expexted} ,got {type_}"
+
+    return content

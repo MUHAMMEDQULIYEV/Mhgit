@@ -25,6 +25,20 @@ def parse_args():
     cat_file_parser.set_defaults(func=cat_file)
     cat_file_parser.add_argument("object")
 
+
+    #commit parser
+    commit_parser=commans.add_parser("commit")
+    commit_parser.set_defaults(func=commit)
+    commit_parser.add_argument("-m","--message",required=True)
+
+    #write tree
+    write_tree_parser=commands.add_parser("write_tree")
+    write_tree_parser.set_defaults(func=write_tree)
+    
+
+
+
+    # init parser
     init_parser=commands.add_parser("init")
     init_parser.set_defaults(func=init)
     return parser.parse_args()
@@ -44,4 +58,9 @@ def hash_object(args):
 
 def cat_file(args):
     sys.stdout.flush()
-    sys.stdout.buffer.write(data.get_object(args.object))
+    sys.stdout.buffer.write(data.get_object(args.object,expexted=None))
+
+
+
+def cat_file(args):
+    base.write_tree()
